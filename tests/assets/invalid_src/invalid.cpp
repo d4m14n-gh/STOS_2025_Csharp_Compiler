@@ -1,9 +1,11 @@
 // todo; change extension ! ====================================================
 
-#include <stdio.h>
-int main() {
-    printf("This is an invalid source file.\n")
-    return 0;
+namespace MyTest
+{
+    public static class Helper
+    {
+        public static st2ring GetMessage() => "Hello from Helper!";
+    }
 }
 
 // * ===========================================================================

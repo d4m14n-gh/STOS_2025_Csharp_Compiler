@@ -1,15 +1,23 @@
-# recommended to use alpine or other minimal base image for smaller image size
-FROM alpine:3.21
-
 # todo =========================================================================
+# recommended to use alpine or other minimal base image for smaller image size
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine
+
 # Labels (metadata)
-LABEL maintainer="<fullname> <email>"
+LABEL maintainer="<Damian Trowski> <damiantrowski.c@gmail.com>"
 LABEL version="<1.0.0>"
-LABEL description="<description>"
+LABEL description="<STOS 2025 Csharp Compiler Image>"
 # Extra labels can be added as needed
 
 # 1. Installation of tools
-RUN apk add --no-cache build-base python3 py3-pip
+RUN apk add --no-cache \
+	python3 \
+	py3-pip \
+    libstdc++ \
+    libgcc \
+    bash \
+    curl \
+    ca-certificates
+
 # * ============================================================================
 
 # 2. Create application directory and non-root user
@@ -31,7 +39,7 @@ USER stosuser
 ENTRYPOINT ["python3", "/app/src/main.py"]
 
 # Build command:
-# docker build -t template_comp comp_image_template/dockerfile
+# docker build -t template_comp template
 
 # Run command:
 # docker run --rm template_comp

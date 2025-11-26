@@ -10,12 +10,16 @@ on:
         description: 'Tag for the Docker image'
         required: false
         default: 'latest'
+      image_name:
+        description: 'Name for the Docker image'
+        required: false
+        default: 'stos_gpp_std17_comp'
 
 
 # todo ========================================================================= 
 env:
-  IMAGE_NAME: stos_gpp_std17_comp
   IMAGE_ARCHIVE: compiler-image.tar.gz
+  IMAGE_NAME: ${{ github.event.inputs.image_name || 'stos_gpp_std17_comp' }}
   IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
 # * ============================================================================
 
