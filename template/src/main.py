@@ -75,7 +75,7 @@ def compile() -> CompilerOutputSchema:
         result = subprocess.run(
             cmd,
             stdout=info_file,
-            stderr=subprocess.DEVNULL
+            stderr=info_file
         )
     
 
