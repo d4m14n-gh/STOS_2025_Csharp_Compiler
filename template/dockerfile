@@ -1,6 +1,6 @@
 # todo =========================================================================
 # recommended to use alpine or other minimal base image for smaller image size
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine
+FROM alpine:3.21
 
 # Labels (metadata)
 LABEL maintainer="<Damian Trowski> <damiantrowski.c@gmail.com>"
@@ -13,10 +13,9 @@ RUN apk add --no-cache \
 	python3 \
 	py3-pip \
     libstdc++ \
+	libssl3 \
     libgcc \
-    bash \
-    curl \
-    ca-certificates
+    dotnet8-sdk
 
 # * ============================================================================
 
