@@ -13,13 +13,13 @@ on:
       image_name:
         description: 'Name for the Docker image'
         required: false
-        default: 'stos_gpp_std17_comp'
+        default: 'stos_cs12_comp'
 
 
 # todo ========================================================================= 
 env:
   IMAGE_ARCHIVE: compiler-image.tar.gz
-  IMAGE_NAME: ${{ github.event.inputs.image_name || 'stos_gpp_std17_comp' }}
+  IMAGE_NAME: ${{ github.event.inputs.image_name || 'stos_cs12_comp' }}
   IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
 # * ============================================================================
 
