@@ -94,7 +94,7 @@ def compile() -> CompilerOutputSchema:
         compiled_binary_tmp_path = os.path.join(tmp_artifact_dir, binary_name)
 
         if os.path.isfile(compiled_binary_tmp_path):
-            shutil.copy2(compiled_binary_tmp_path, compiled_program_path)
+            shutil.copy(compiled_binary_tmp_path, compiled_program_path)
             os.chmod(compiled_program_path, 0o777)
         else:
             logger.error("Compilation failed: binary was not created")
