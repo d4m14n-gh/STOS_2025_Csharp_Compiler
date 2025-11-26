@@ -95,7 +95,7 @@ def compile() -> CompilerOutputSchema:
 
         if os.path.isfile(compiled_binary_tmp_path):
             shutil.copy2(compiled_binary_tmp_path, compiled_program_path)
-            os.chmod(compiled_program_path, 0o755)
+            os.chmod(compiled_program_path, 0o777)
         else:
             logger.error("Compilation failed: binary was not created")
             success = False
