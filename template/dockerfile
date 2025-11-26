@@ -1,0 +1,37 @@
+# recommended to use alpine or other minimal base image for smaller image size
+FROM alpine:3.21
+
+# todo =========================================================================
+# Labels (metadata)
+LABEL maintainer="<fullname> <email>"
+LABEL version="<1.0.0>"
+LABEL description="<description>"
+# Extra labels can be added as needed
+
+# 1. Installation of tools
+RUN apk add --no-cache build-base python3 py3-pip
+# * ============================================================================
+
+# 2. Create application directory and non-root user
+WORKDIR /app
+RUN adduser -D stosuser \
+	&& chown -R stosuser /app
+
+# 3. Install dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
+
+# 4. Copy source code
+COPY src ./src
+
+# 5. Switch to non-root user
+USER stosuser
+
+# 6. Default entrypoint
+ENTRYPOINT ["python3", "/app/src/main.py"]
+
+# Build command:
+# docker build -t template_comp comp_image_template/dockerfile
+
+# Run command:
+# docker run --rm template_comp
