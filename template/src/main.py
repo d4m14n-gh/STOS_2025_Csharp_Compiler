@@ -54,6 +54,7 @@ def compile() -> CompilerOutputSchema:
         return result
     
     # todo =====================================================================
+    os.umask(0o000)
     os.makedirs(tmp_src_dir, exist_ok=True)
     os.makedirs(tmp_artifact_dir, exist_ok=True)
     for src_file in all_src_files:
@@ -94,6 +95,7 @@ def compile() -> CompilerOutputSchema:
 
         if os.path.isfile(compiled_binary_tmp_path):
             shutil.copy2(compiled_binary_tmp_path, compiled_program_path)
+            os.chmod(compiled_program_path, 0o755)
         else:
             logger.error("Compilation failed: binary was not created")
             success = False
