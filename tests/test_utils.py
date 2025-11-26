@@ -1,12 +1,12 @@
 import os
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Tuple
 from compiler_output_schema import CompilerOutputSchema
 
 
 class CompilerEnvMock(NamedTuple):
     base_path: str
     envs: Dict[str, str]
-    bindings: Dict[str, str]
+    bindings: Dict[str, Tuple[str, bool]]
     run_command: List[str]
     image_name: str
 
@@ -23,12 +23,12 @@ def gen_env_paths(base_path: str) -> Dict[str, str]:
     }
 
 
-def gen_bindings(local_base_path: str, host_base_path: str) -> Dict[str, str]:
+def gen_bindings(local_base_path: str, host_base_path: str) -> Dict[str, Tuple[str, bool]]:
     return {
-        os.path.join(host_base_path, "src"):  os.path.join(local_base_path, "src"),
-        os.path.join(host_base_path, "lib"): os.path.join(local_base_path, "lib"),
-        os.path.join(host_base_path, "out"): os.path.join(local_base_path, "out"),
-        os.path.join(host_base_path, "logs"): os.path.join(local_base_path, "logs")
+        os.path.join(host_base_path, "src"):  (os.path.join(local_base_path, "src"), True),
+        os.path.join(host_base_path, "lib"): (os.path.join(local_base_path, "lib"), True),
+        os.path.join(host_base_path, "out"): (os.path.join(local_base_path, "out"), False),
+        os.path.join(host_base_path, "logs"): (os.path.join(local_base_path, "logs"), False)
 }
 
 
@@ -49,12 +49,12 @@ def init_mock_files(mock_base_path: str, src_files_path: str) -> None:
             f_dest.write(f_src.read())
 
 
-def gen_run_command(envs: Dict[str, str], bindings: Dict[str, str], image_name: str) -> List[str]:
-    container_run_command = ["docker", "run", "--rm"]
+def gen_run_command(envs: Dict[str, str], bindings: Dict[str, Tuple[str, bool]], image_name: str) -> List[str]:
+    container_run_command = ["docker", "run", "--rm", "--memory=4g", "--cpus=2", "--pids-limit=50"]
     for k, host_path in envs.items():
         container_run_command += ["-e", f"{k}={host_path}"]
-    for host_path, container_path in bindings.items():
-        container_run_command += ["-v", f"{host_path}:{container_path}"]
+    for host_path, (container_path, readonly) in bindings.items():
+        container_run_command += ["-v", f"{host_path}:{container_path}:{'ro' if readonly else 'rw'}"]
     container_run_command += [image_name]
     return container_run_command
 

@@ -106,3 +106,11 @@ def test_container_when_output_created_should_contain_valid_json(mock_env: utils
     output_file_path = utils.gen_env_paths(mock_env.base_path)["OUT"]
     output = utils.fetch_compilation_output(output_file_path)
     assert isinstance(output.success, bool), "Output JSON file does not contain valid 'success' field"
+
+
+def test_container_output_runs_on_success(mock_env: utils.CompilerEnvMock):
+    subprocess.run(mock_env.run_command, check=True)
+    binary_path = utils.gen_env_paths(mock_env.base_path)["BIN"]
+
+    result = subprocess.run([binary_path], text=True)
+    assert result.returncode == 0, "Compiled binary did not run successfully"
